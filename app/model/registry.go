@@ -238,7 +238,7 @@ var registry = map[TradeType]TradeTypeConf{
 		Native:      true,
 		Decimal:     -6,
 		AmountRange: Range{
-			MinAmount: decimal.NewFromFloat(0.1),
+			MinAmount: decimal.NewFromFloat(0.000001),
 			MaxAmount: decimal.NewFromFloat(1000000),
 		},
 		ExplorerFmt:  "https://tronscan.org/#/transaction/%s",

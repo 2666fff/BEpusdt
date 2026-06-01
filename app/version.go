@@ -1,3 +1,3 @@
 package app
 
-var Version = "dev-unknown-version"
+var Version = "v1.23.6-fungame-tronfix-20260602"

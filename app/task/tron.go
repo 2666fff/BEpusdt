@@ -199,7 +199,7 @@ func (t *tron) blockParse(n any) {
 	var transfers = make([]transfer, 0)
 	var timestamp = time.UnixMilli(bok.GetBlockHeader().GetRawData().GetTimestamp())
 	for _, trans := range bok.GetTransactions() {
-		if !trans.Result.Result {
+		if !t.transactionSucceeded(trans) {
 
 			continue
 		}
@@ -352,6 +352,25 @@ func (t *tron) blockParse(n any) {
 	}
 
 	log.Task.Info(fmt.Sprintf("区块扫描完成(Tron): %d 成功率：%s", num, conf.GetSuccessRate(conf.Tron)))
+}
+
+func (t *tron) transactionSucceeded(trans *api.TransactionExtention) bool {
+	if trans == nil || trans.GetTransaction() == nil {
+		return false
+	}
+
+	ret := trans.GetTransaction().GetRet()
+	if len(ret) == 0 {
+		return trans.GetResult().GetResult()
+	}
+
+	for _, item := range ret {
+		if item.GetContractRet() != core.Transaction_Result_SUCCESS {
+			return false
+		}
+	}
+
+	return true
 }
 
 func (t *tron) parseTrc20ContractTransfer(data []byte) (string, *big.Int) {
